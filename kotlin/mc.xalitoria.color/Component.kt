@@ -2,29 +2,29 @@
 
 package mc.xalitoria.color
 
-fun String.componentBukkitColors(): String =
-    replace(bukkitHexRegex) { match ->
+fun String.componentBukkitCodes(): String =
+    replace(bukkitColorRegex) { match ->
         val hex = match.value
         when (hex.length) {
             8 -> StringBuilder(7).append("<color:#").apply {
                 for (c in hex.drop(3)) {
-                    if (c == DELIMITER) continue
+                    if (c == COLOR_DELIM) continue
                     append(c).append(c)
                 }
                 append(">")
             }
-            14 -> hex.replace("[${DELIMITER}x]".toRegex(), "").let { "<color:#$it>" }
+            14 -> hex.replace("[${COLOR_DELIM}x]".toRegex(), "").let { "<color:#$it>" }
             else -> hex
         }
     }
-inline fun <T : Iterable<String>> T.componentBukkitColors(): List<String> =
-    map { it.componentBukkitColors() }
-inline fun Array<String>.componentBukkitColors() =
-    map { it.componentBukkitColors() }.toTypedArray()
+inline fun <T : Iterable<String>> T.componentBukkitCodes(): List<String> =
+    map { it.componentBukkitCodes() }
+inline fun Array<String>.componentBukkitCodes() =
+    map { it.componentBukkitCodes() }.toTypedArray()
 
 
 fun String.componentColorCodes(): String =
-    colorCodeRegex.replace(this) { match ->
+    replace(codeColorRegex) { match ->
         CodedColor[match.value[1]]?.let { "<${it.name.lowercase()}>" } ?: match.value
     }
 inline fun <T : Iterable<String>> T.componentColorCodes(): List<String> =
@@ -34,7 +34,7 @@ inline fun Array<String>.componentColorCodes() =
 
 
 fun String.componentDecorCodes(): String =
-    decorCodeRegex.replace(this) { match ->
+    replace(codeDecorRegex) { match ->
         when (match.groupValues[1]) {
             "k" -> "obf"
             "l" -> "b"
@@ -52,7 +52,7 @@ inline fun Array<String>.componentDecorCodes() =
 
 
 fun String.componentHexCodes(): String =
-    replace(hexCodeRegex) { match ->
+    replace(hexColorRegex) { match ->
         Color[match.groupValues[1]]?.toString()?.let { "<color:#$it>" } ?: match.value
     }
 inline fun <T : Iterable<String>> T.componentHexCodes(): List<String> =
@@ -62,7 +62,7 @@ inline fun Array<String>.componentHexCodes() =
 
 
 fun String.componentNamedColors(): String =
-    replace(namedColorRegex) { Color[it.groupValues[1]]?.let { c -> "<color:#$c>"} ?: it.value }
+    replace(namedColorRegex) { match -> NamedColor[match.groupValues[1]]?.let { "<color:#${it.color}>"} ?: match.value }
 inline fun <T : Iterable<String>> T.componentNamedColors(): List<String> =
     map { it.componentNamedColors() }
 inline fun Array<String>.componentNamedColors() =
@@ -82,9 +82,12 @@ inline fun Array<String>.componentCmiGradients() =
 
 
 fun String.componentColors(): String = mojangColorRegex.replace(this) { match ->
-    match.value.drop(3).replace(SECTION.toString(), "").let { "<color:#$it>" }
-}.componentCmiGradients().componentNamedColors()
-    .componentHexCodes().componentDecorCodes().componentColorCodes()
+    if (match.value.length < 14) match.value
+    else match.value.drop(3).replace(SECTION.toString(), "").let { "<color:#$it>" }
+}.replace(SECTION, COLOR_DELIM)
+    .componentCmiGradients().componentNamedColors()
+    .componentHexCodes().componentBukkitCodes()
+    .componentDecorCodes().componentColorCodes()
 inline fun <T : Iterable<String>> T.componentColors(): List<String> =
     map { it.componentColors() }
 inline fun Array<String>.componentColors() =

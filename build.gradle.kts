@@ -1,14 +1,15 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import xalitoria.repo.reposilite
 
 plugins {
     `maven-publish`
 }
 
 group = "mc.xalitoria"
-version = "0.0.2"
+version = "0.0.8"
 
 dependencies {
-    implementation(libs.mixbox)
+    api(libs.mixbox)
     testImplementation(kotlin("test"))
 }
 
@@ -33,15 +34,6 @@ publishing {
         }
     }
     repositories {
-        maven("https://maven.xali.host/releases") {
-            credentials {
-                username = System.getenv("MAVEN_USER") ?: project.findProperty("maven.user") as? String
-                password = System.getenv("MAVEN_TOKEN") ?: project.findProperty("maven.token") as? String
-            }
-        }
+        reposilite(project, "https://maven.xali.host/releases")
     }
-}
-
-tasks {
-
 }

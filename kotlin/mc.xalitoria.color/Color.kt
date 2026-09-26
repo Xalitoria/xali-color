@@ -10,7 +10,7 @@ class Color(red: Int, green: Int, blue: Int, strict: Boolean = false): AnsiColor
     val red: Int = if (strict) { require(red in range) { "Red component must be between 0 and 255" }; red } else red.coerceIn(range)
     val green: Int = if (strict) { require(green in range) { "Green component must be between 0 and 255" }; green } else green.coerceIn(range)
     val blue: Int = if (strict) { require(blue in range) { "Blue component must be between 0 and 255" }; blue } else blue.coerceIn(range)
-    override val rgb: Int = (red shl 16) + (green shl 8) + blue
+    override val hexFg: Int = (red shl 16) + (green shl 8) + blue
 
     constructor(rgb: Int, strict: Boolean = false) : this(
         rgb shr 16 and 0xFF,
@@ -23,7 +23,7 @@ class Color(red: Int, green: Int, blue: Int, strict: Boolean = false): AnsiColor
 
     val destructured: Destructured by lazy { Destructured(red, green, blue) }
 
-    override fun toString(): String = "%06X".format(rgb)
+    override fun toString(): String = "%06X".format(hexFg)
     val ampString by lazy { "&" + toString() }
     val javaColor by lazy { JColor(red, green, blue) }
 
@@ -44,7 +44,7 @@ class Color(red: Int, green: Int, blue: Int, strict: Boolean = false): AnsiColor
     }
 
     fun mixbox(mixTo: Color, factor: Float): Color =
-        Mixbox.lerp(rgb, mixTo.rgb, factor.coerceIn(0F, 1F)).let(::Color)
+        Mixbox.lerp(hexFg, mixTo.hexFg, factor.coerceIn(0F, 1F)).let(::Color)
 
     fun interpolateToList(color: Color, steps: Int): List<Color> =
         (0..steps).map { interpolate(color, it.toFloat() / steps) }
@@ -62,13 +62,13 @@ class Color(red: Int, green: Int, blue: Int, strict: Boolean = false): AnsiColor
     }
 
     fun hexMinify(): String = CodedColor.nearest(this).let {
-        if (it.rgb == rgb) "$SECTION${it.code}" else hexMojang()
+        if (it.hexFg == hexFg) "$SECTION${it.code}" else hexMojang()
     }
 
     companion object {
         val JColor.xColor get() = Color(red, green, blue)
         const val ANSI_ESC = "\u001B["
-        val ANSI_LINK = CodedColor.LIGHT_AQUA.ansiFg
+        val ANSI_LINK = CodedColor.AQUA.ansiFg
         private val range = 0..255
 
         /**

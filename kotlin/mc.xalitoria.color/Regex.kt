@@ -1,8 +1,10 @@
 package mc.xalitoria.color
 
+import kotlin.text.RegexOption.DOT_MATCHES_ALL
 import kotlin.text.RegexOption.IGNORE_CASE
 
-const val DELIMITER = '&'
+const val COLOR_DELIM = '&'
+const val SHADOW_DELIM = '^'
 const val SECTION = '\u00a7'
 
 val mojangCodeRegex = Regex("&x(?:&[0-9a-f]){6}|&[0-9a-fk-or]".replace('&', SECTION), IGNORE_CASE)
@@ -11,28 +13,34 @@ val mojangColorRegex = Regex("&x(?:&[0-9a-f]){6}|&[0-9a-f]".replace('&', SECTION
 /**
  * @return the [Regex] for color codes ("&C")
  */
-val colorCodeRegex = Regex("$DELIMITER([0-9a-f])", IGNORE_CASE)
+val codeColorRegex = Regex("$COLOR_DELIM([0-9a-f])", IGNORE_CASE)
+val codeShadowRegex = Regex("$SHADOW_DELIM([0-9a-f])", IGNORE_CASE)
 
 /**
  * The [Regex] for decor codes ("&k-o" and "&r")
  */
-val decorCodeRegex = Regex("$DELIMITER([k-or])", IGNORE_CASE)
+val codeDecorRegex = Regex("$COLOR_DELIM([k-or])", IGNORE_CASE)
 
 /**
  * The [Regex] for bukkit hex codes ("&x&R&R&G&G&B&B" and "&x&R&G&B")
  */
-val bukkitHexRegex = Regex("${DELIMITER}x((?:(?:$DELIMITER[0-9a-f]){3}){1,2})", IGNORE_CASE)
+val bukkitColorRegex = Regex("${COLOR_DELIM}x((?:(?:$COLOR_DELIM[0-9a-f]){3}){1,2})", IGNORE_CASE)
+val bukkitShadowRegex = Regex("${SHADOW_DELIM}x((?:(?:$SHADOW_DELIM[0-9a-f]){3,4}){1,2})", IGNORE_CASE)
 
 /**
  * The [Regex] for hex codes ("&amp;#RRGGBB" and "&amp;#RGB")
  */
-val hexCodeRegex = Regex("$DELIMITER#((?:[0-9a-f]{3}){1,2})", IGNORE_CASE)
+val hexColorRegex = Regex("$COLOR_DELIM#((?:[0-9a-f]{3}){1,2})", IGNORE_CASE)
+val hexShadowRegex = Regex("$SHADOW_DELIM#((?:[0-9a-f]{3,4}){1,2})", IGNORE_CASE)
 
 const val namedColorPattern = "[0-9a-z]{3,}?"
 val namedColorRegex             = Regex("\\{#($namedColorPattern)}", IGNORE_CASE)
 val namedColorSeparatorRegex    = Regex("\\{#($namedColorPattern)<>}", IGNORE_CASE)
-val namedColorGradientRegex     = Regex("\\{#($namedColorPattern)>}(.*?)\\{#($namedColorPattern)<}", IGNORE_CASE)
-val namedColorGradientListRegex = Regex("\\{#(?:$namedColorPattern,)*?$namedColorPattern,?}", IGNORE_CASE)
+val namedColorGradientRegex     = Regex("\\{#($namedColorPattern)>}(.*?)\\{#($namedColorPattern)<}", setOf(IGNORE_CASE, DOT_MATCHES_ALL))
+
+/** A MiniMessage tag such as `<bold>`, `</red>` or `<click:open_url:...>`; a gradient leaves these uncoloured. */
+val miniTagRegex = Regex("<[/!]?[a-zA-Z#][^<>]*>")
+//val namedColorGradientListRegex = Regex("\\{#(?:$namedColorPattern,)*?$namedColorPattern,?}", IGNORE_CASE)
 
 val messageLinkRegex = Regex("(\\[.+])(\\(.+\\))", IGNORE_CASE)
 

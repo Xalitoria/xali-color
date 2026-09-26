@@ -8,25 +8,25 @@ import mc.xalitoria.color.Color.Companion.ANSI_ESC
  * Named colors from https://www.zrips.net/cmi/hex-colors
  */
 @Suppress("unused")
-enum class NamedColor(override val rgb: Int): AnsiColor  {
-    ANSI_BLACK              (CodedColor.BLACK),         ANSI_DARK_BLACK(ANSI_BLACK),
-    ANSI_BLUE				(CodedColor.BLUE),          ANSI_DARK_BLUE(ANSI_BLUE),
-    ANSI_GREEN			    (CodedColor.GREEN),         ANSI_DARK_GREEN(ANSI_GREEN),
-    ANSI_AQUA 			    (CodedColor.AQUA),          ANSI_DARK_AQUA(ANSI_AQUA),
-    ANSI_RED 			    (CodedColor.RED),           ANSI_DARK_RED(ANSI_RED),
-    ANSI_PURPLE 			(CodedColor.PURPLE),        ANSI_DARK_PURPLE(ANSI_PURPLE),
+enum class NamedColor(override val hexFg: Int): AnsiColor  {
+    ANSI_BLACK              (CodedColor.BLACK),
+    ANSI_BLUE				(CodedColor.DARK_BLUE),     ANSI_DARK_BLUE(ANSI_BLUE),
+    ANSI_GREEN			    (CodedColor.DARK_GREEN),    ANSI_DARK_GREEN(ANSI_GREEN),
+    ANSI_AQUA 			    (CodedColor.DARK_AQUA),     ANSI_DARK_AQUA(ANSI_AQUA),
+    ANSI_RED 			    (CodedColor.DARK_RED),      ANSI_DARK_RED(ANSI_RED),
+    ANSI_PURPLE 			(CodedColor.DARK_PURPLE),   ANSI_DARK_PURPLE(ANSI_PURPLE),
     ANSI_GOLD 			    (CodedColor.GOLD),          ANSI_DARK_GOLD(ANSI_GOLD),
 
     ANSI_GRAY 			    (CodedColor.GRAY),          ANSI_GREY(ANSI_GRAY),
     ANSI_LIGHT_GRAY         (ANSI_GRAY),                ANSI_LIGHT_GREY(ANSI_GRAY),
 
     ANSI_DARK_GRAY 			(CodedColor.DARK_GRAY),     ANSI_DARK_GREY(ANSI_DARK_GRAY),
-    ANSI_LIGHT_BLUE         (CodedColor.LIGHT_BLUE),
-    ANSI_LIGHT_GREEN        (CodedColor.LIGHT_GREEN),
-    ANSI_LIGHT_AQUA         (CodedColor.LIGHT_AQUA),
-    ANSI_LIGHT_RED          (CodedColor.LIGHT_RED),
-    ANSI_LIGHT_PURPLE       (CodedColor.LIGHT_PURPLE),  ANSI_LIGHT_MAGENTA(ANSI_LIGHT_PURPLE),
-    ANSI_LIGHT_GOLD         (CodedColor.LIGHT_GOLD),    ANSI_LIGHT_YELLOW(ANSI_LIGHT_GOLD),
+    ANSI_LIGHT_BLUE         (CodedColor.BLUE),
+    ANSI_LIGHT_GREEN        (CodedColor.GREEN),
+    ANSI_LIGHT_AQUA         (CodedColor.AQUA),
+    ANSI_LIGHT_RED          (CodedColor.RED),
+    ANSI_LIGHT_PURPLE       (CodedColor.PURPLE),        ANSI_LIGHT_MAGENTA(ANSI_LIGHT_PURPLE),
+    ANSI_LIGHT_GOLD         (CodedColor.YELLOW),        ANSI_LIGHT_YELLOW(ANSI_LIGHT_GOLD),
     ANSI_WHITE              (CodedColor.WHITE),         ANSI_LIGHT_WHITE(ANSI_WHITE),
 
     BLACK					(ANSI_BLACK),
@@ -1601,7 +1601,7 @@ enum class NamedColor(override val rgb: Int): AnsiColor  {
     IVORY					(0xFFFFF0),
     WHITE					(0xFFFFFF);
     
-    constructor(copy: AnsiColor): this(copy.rgb)
+    constructor(copy: AnsiColor): this(copy.hexFg)
 
     override val ansiFg by lazy {
         val (red, green, blue) = color.destructured
@@ -1611,7 +1611,7 @@ enum class NamedColor(override val rgb: Int): AnsiColor  {
         val (red, green, blue) = color.destructured
         "${ANSI_ESC}48;2;$red;$green;$blue" + "m"
     }
-    val color: Color by lazy { Color(rgb) }
+    val color: Color by lazy { Color(hexFg) }
 
     override fun toString(): String = "{#${name.lowercase()}}"
 

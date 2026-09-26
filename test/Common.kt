@@ -284,7 +284,7 @@ class Compress {
 
 class Features {
     @Test fun `coded color to string`() {
-        assertEquals("§5hello", ("" + CodedColor.PURPLE + "hello").applyColorCodes())
+        assertEquals("§5hello", ("" + CodedColor.DARK_PURPLE + "hello").applyColorCodes())
     }
 
     @Test fun `named color to string`() {
@@ -324,4 +324,34 @@ class Playground {
         .replace("&x((?:&[a-f0-9]){6})".toRegex()) {
             "&#" + it.groupValues[1].replace("&", "")
         }
+}
+class GradientTagTest {
+    @Test
+    fun tagsAndNewlinesStayInsideGradient() {
+        val out = "{#a0a>}<bold>ab</bold>\ncd{#fff<}".applyCmiGradients()
+        assertEquals(true, out.contains("<bold>") && out.contains("</bold>"))
+        assertEquals(false, out.contains("{#"))
+        // four visible letters plus the newline are coloured; tags are not
+        assertEquals(5, Regex("§x").findAll(out).count())
+    }
+
+    @Test
+    fun escapedAngleBracketIsKept() {
+        assertEquals(true, "{#a0a>}a\\<b{#fff<}".applyCmiGradients().contains("\\<"))
+    }
+}
+
+class ComponentShortCodeTest {
+    @Test
+    fun singleCodesAreNotHex() {
+        assertEquals("<green>hi", "§ahi".componentColors())
+        assertEquals("<color:#aabbcc>hi", "§x§a§a§b§b§c§chi".componentColors())
+    }
+}
+
+class MiniNameTest {
+    @Test
+    fun lightPurpleUsesMiniMessageName() {
+        assertEquals("<light_purple>x<dark_purple>y", "&dx&5y".componentColors())
+    }
 }

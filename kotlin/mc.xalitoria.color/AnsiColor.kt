@@ -1,7 +1,8 @@
 package mc.xalitoria.color
 
 interface AnsiColor {
-    val rgb: Int
+    val hexFg: Int
+    val hexBg: Int? get() = null
     val ansiFg: String
     val ansiBg: String
 }
