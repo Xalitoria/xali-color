@@ -6,10 +6,11 @@ plugins {
 }
 
 group = "mc.xalitoria"
-version = "0.0.8"
+version = "0.1.0"
 
 dependencies {
     api(libs.mixbox)
+    api(libs.bundles.adventure)
     testImplementation(kotlin("test"))
 }
 

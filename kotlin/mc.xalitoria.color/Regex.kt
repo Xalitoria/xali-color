@@ -36,11 +36,12 @@ val hexShadowRegex = Regex("$SHADOW_DELIM#((?:[0-9a-f]{3,4}){1,2})", IGNORE_CASE
 const val namedColorPattern = "[0-9a-z]{3,}?"
 val namedColorRegex             = Regex("\\{#($namedColorPattern)}", IGNORE_CASE)
 val namedColorSeparatorRegex    = Regex("\\{#($namedColorPattern)<>}", IGNORE_CASE)
-val namedColorGradientRegex     = Regex("\\{#($namedColorPattern)>}(.*?)\\{#($namedColorPattern)<}", setOf(IGNORE_CASE, DOT_MATCHES_ALL))
+val namedColorGradientRegex     = Regex("\\{#($namedColorPattern)>}(.*?)\\{#($namedColorPattern)<}", [IGNORE_CASE, DOT_MATCHES_ALL])
+val namedColorGradientEscapeRegex = Regex("\\\\<(?=>?})")
+//val namedColorGradientListRegex = Regex("\\{#(?:$namedColorPattern,)*?$namedColorPattern,?}", IGNORE_CASE)
 
 /** A MiniMessage tag such as `<bold>`, `</red>` or `<click:open_url:...>`; a gradient leaves these uncoloured. */
-val miniTagRegex = Regex("<[/!]?[a-zA-Z#][^<>]*>")
-//val namedColorGradientListRegex = Regex("\\{#(?:$namedColorPattern,)*?$namedColorPattern,?}", IGNORE_CASE)
+val miniTagRegex = Regex("<[/!]?[a-z#][^<>]*>", IGNORE_CASE)
 
 val messageLinkRegex = Regex("(\\[.+])(\\(.+\\))", IGNORE_CASE)
 

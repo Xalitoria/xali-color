@@ -13,15 +13,22 @@ import mc.xalitoria.color.Color.Companion.ANSI_ESC
 import mc.xalitoria.color.Color.Companion.ANSI_LINK
 
 fun String.stripMatching(query: Color): String =
-    replace(query.hexMojang(), "").replace(query.hexMinify(), "")
+    replace(query.hexMojang(), "")
+    .replace(query.hexMinify(), "")
 
-//
-// STRIP CODES AND COLORS
-//
+/**
+ * ================================
+ * STRIP CODES AND COLORS
+ * ================================
+ */
+
+
 fun String.stripStyling(): String =
     stripNamedColors().stripHexCodes().stripBukkitCodes()
 
-// STRIP CMI GRADIENTS
+/**
+ * STRIP CMI GRADIENTS
+ */
 fun String.stripCmiGradients(): String =
     expandCmiGradientSeparators().
     replace(namedColorGradientRegex) { it.groupValues[2] }
@@ -30,7 +37,9 @@ inline fun <T : Iterable<String>> T.stripCmiGradients(): List<String> =
 inline fun Array<String>.stripCmiGradients() =
     map { it.stripCmiGradients() }.toTypedArray()
 
-// STRIP NAMED COLORS
+/**
+ * STRIP NAMED COLORS
+ */
 fun String.stripNamedColors(): String =
     replace(namedColorRegex) { if (Color[it.groupValues[1]] != null) "" else it.value }
 inline fun <T : Iterable<String>> T.stripNamedColors(): List<String> =
@@ -38,7 +47,9 @@ inline fun <T : Iterable<String>> T.stripNamedColors(): List<String> =
 inline fun Array<String>.stripNamedColors() =
     map { it.stripNamedColors() }.toTypedArray()
 
-// STRIP HEX CODES
+/**
+ * STRIP HEX CODES
+ */
 fun String.stripHexCodes(): String =
     replace(hexColorRegex, "")
 inline fun <T : Iterable<String>> T.stripHexCodes(): List<String> =
@@ -46,7 +57,9 @@ inline fun <T : Iterable<String>> T.stripHexCodes(): List<String> =
 inline fun Array<String>.stripHexCodes() =
     map { it.stripHexCodes() }.toTypedArray()
 
-// STRIP BUKKIT CODES
+/**
+ * STRIP BUKKIT CODES
+ */
 fun String.stripBukkitCodes() =
     stripBukkitHexCodes().stripColorCodes().stripDecorCodes()
 inline fun <T : Iterable<String>> T.stripBukkitCodes(): List<String> =
@@ -54,7 +67,9 @@ inline fun <T : Iterable<String>> T.stripBukkitCodes(): List<String> =
 inline fun Array<String>.stripBukkitCodes() =
     map { it.stripBukkitCodes() }.toTypedArray()
 
-// STRIP BUKKIT HEX CODES
+/**
+ * STRIP BUKKIT HEX CODES
+ */
 fun String.stripBukkitHexCodes(): String =
     replace(bukkitColorRegex, "")
 inline fun <T : Iterable<String>> T.stripBukkitHexCodes(): List<String> =
@@ -62,7 +77,9 @@ inline fun <T : Iterable<String>> T.stripBukkitHexCodes(): List<String> =
 inline fun Array<String>.stripBukkitHexCodes() =
     map { it.stripBukkitHexCodes() }.toTypedArray()
 
-// STRIP DECOR CODES
+/**
+ * STRIP DECOR CODES
+ */
 fun String.stripDecorCodes(): String =
     replace(codeDecorRegex, "")
 inline fun <T : Iterable<String>> T.stripDecorCodes(): List<String> =
@@ -70,7 +87,9 @@ inline fun <T : Iterable<String>> T.stripDecorCodes(): List<String> =
 inline fun Array<String>.stripDecorCodes() =
     map { it.stripDecorCodes() }.toTypedArray()
 
-// STRIP COLOR CODES
+/**
+ * STRIP COLOR CODES
+ */
 fun String.stripColorCodes(): String =
     replace(codeColorRegex, "")
 inline fun <T : Iterable<String>> T.stripColorCodes(): List<String> =
@@ -78,7 +97,9 @@ inline fun <T : Iterable<String>> T.stripColorCodes(): List<String> =
 inline fun Array<String>.stripColorCodes() =
     map { it.stripColorCodes() }.toTypedArray()
 
-// STRIP MOJANG CODES
+/**
+ * STRIP MOJANG CODES
+ */
 fun String.stripMojangCodes(): String =
     replace(mojangCodeRegex, "")
 inline fun <T : Iterable<String>> T.stripMojangCodes(): List<String> =
@@ -104,12 +125,14 @@ inline fun Array<String>.stripColors() =
     map { it.stripColors() }.toTypedArray()
 
 
-//
-// CONVERT COLORS AND CODES
-//
+/**
+ * ================================
+ * CONVERT COLORS AND CODES
+ * ================================
+ */
 
 /**
- * @return the [String] with all [NamedColor] codes ("{#RRGGBB}", "{#RGB}" or "{#COLORNAME}") applied
+ * @return the [String] with "{#RRGGBB}", "{#RGB}" or "{#[NamedColor]}" applied
  * to minified mojang color codes ("&C" or "§x§R§R§G§G§B§B")
  */
 fun String.applyNamedColors(): String =
@@ -142,7 +165,9 @@ inline fun <T : Iterable<String>> T.applyColorsAndDecor(): List<String> =
 inline fun Array<String>.applyColorsAndDecor() =
     map { it.applyColorsAndDecor() }.toTypedArray()
 
-// CONVERT BUKKIT COLORS
+/**
+ * CONVERT BUKKIT COLORS
+ */
 fun String.applyBukkitColors(): String = replace(bukkitColorRegex) { match ->
     Color[match.groupValues[1].replace("&", "")]!!.hexMojang()
 }
@@ -151,7 +176,9 @@ inline fun <T : Iterable<String>> T.applyBukkitColors(): List<String> =
 inline fun Array<String>.applyBukkitColors() =
     map { it.applyBukkitColors() }.toTypedArray()
 
-// CONVERT DECOR CODES
+/**
+ * CONVERT DECOR CODES
+ */
 fun String.applyDecorCodes(): String =
     replace(codeDecorRegex) { SECTION.toString() + it.value[1] }
 inline fun <T : Iterable<String>> T.applyDecorCodes(): List<String> =
@@ -159,7 +186,9 @@ inline fun <T : Iterable<String>> T.applyDecorCodes(): List<String> =
 inline fun Array<String>.applyDecorCodes() =
     map { it.applyDecorCodes() }.toTypedArray()
 
-// CONVERT COLOR CODES
+/**
+ * CONVERT COLOR CODES
+ */
 fun String.applyColorCodes(): String =
     replace(codeColorRegex) { SECTION + it.groupValues[1] }
 inline fun <T : Iterable<String>> T.applyColorCodes(): List<String> =
@@ -167,13 +196,17 @@ inline fun <T : Iterable<String>> T.applyColorCodes(): List<String> =
 inline fun Array<String>.applyColorCodes() =
     map { it.applyColorCodes() }.toTypedArray()
 
+/** Restores the `<` of `{#name<}` markers that `MiniMessage.serialize` escaped, so gradients survive a round trip. */
+fun String.unescapeGradients(): String = replace(namedColorGradientEscapeRegex, "<")
 
 fun String.expandCmiGradientSeparators(): String =
     replace(namedColorSeparatorRegex) { match ->
         val hexCode = Color[match.groupValues[1]] ?: return@replace match.value
         val decor = BooleanArray(5)
         val matches = codeDecorRegex.findAll(substring(0, match.range.first)).toList()
-        for (i in matches.indices.reversed()) { // reversed for proper sorting
+        for (i in matches.indices.reversed()) { /**
+ * reversed for proper sorting
+ */
             val f = matches[i].value[1].lowercaseChar()
             if (f == 'r') break
             decor[f - 'k'] = true
@@ -234,7 +267,9 @@ fun String.minifyColors(): String {
         val m = match.value
         sift.add(m)
 
-        // whitespace handling
+        /**
+ * whitespace handling
+ */
         if (iterator.hasNext()) {
             if (text.isEmpty()) continue
             if (text.isBlank() && !(m.contains(SECTION + "m") || m.contains(SECTION + "n"))) {
@@ -244,14 +279,22 @@ fun String.minifyColors(): String {
             }
         }
 
-        val newDecor = BooleanArray(5) // me trying to optimize lol
+        val newDecor = BooleanArray(5) /**
+ * me trying to optimize lol
+ */
         val newColor = buildString {
-            for (s in sift.indices.reversed()) { // reversing the sift allows alphabetical sorting
+            for (s in sift.indices.reversed()) { /**
+ * reversing the sift allows alphabetical sorting
+ */
                 val c = sift[s][1].lowercaseChar()
                 if (c in 'k'..'o') {
                     newDecor[c - 'k'] = true
-                    continue // this is stupidly important
-                } else if (c in "0123456789abcdefr") { // r is considered a color in this case
+                    continue /**
+ * this is stupidly important
+ */
+                } else if (c in "0123456789abcdefr") { /**
+ * r is considered a color in this case
+ */
                     sift[s].let { if (lastColor != it) append(it) }
                 } else if (c == 'x') {
                     Color.mojang(sift[s])!!.hexMinify().let { if (lastColor != it) append(it) }
@@ -295,7 +338,9 @@ fun String.codesToAnsi(): String {
     val result = StringBuilder(length + 32)
     var cursor = 0
 
-    // TODO Find a better way to do this without a string map
+    /**
+ * TODO Find a better way to do this without a string map
+ */
     for ((kind = first, match = second) in matches) {
         val start = match.range.first
         val endEx = match.range.last + 1
@@ -310,10 +355,16 @@ fun String.codesToAnsi(): String {
 
             "fmt" -> when (match.value.last().lowercaseChar()) {
                 'k' -> { /* obfuscate: ignore */ }
-                'l' -> result.append("${ANSI_ESC}1m") // bold
+                'l' -> result.append("${ANSI_ESC}1m") /**
+ * bold
+ */
                 'm' -> { /* monospace: no ANSI */ }
-                'n' -> result.append("${ANSI_ESC}4m") // underline
-                'o' -> result.append("${ANSI_ESC}3m") // italic
+                'n' -> result.append("${ANSI_ESC}4m") /**
+ * underline
+ */
+                'o' -> result.append("${ANSI_ESC}3m") /**
+ * italic
+ */
                 'r' -> result.append(RESET.ansiFg)
             }
 
@@ -357,7 +408,9 @@ fun String.gradient(start: Color, end: Color): String {
                 continue
             }
         }
-        // Tags stay uncoloured and uncounted; an escaped `\<` is one character, so its escape holds.
+        /**
+ * Tags stay uncoloured and uncounted; an escaped `\<` is one character, so its escape holds.
+ */
         if (char == '<') miniTagRegex.matchAt(this, textIndex)?.let {
             result.append(it.value)
             textIndex += it.value.length

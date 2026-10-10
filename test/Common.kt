@@ -1,9 +1,9 @@
+// am aware of how excessive this is, and half of these tests are an insult to my skills
+
 import mc.xalitoria.color.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.text.iterator
-
-// am aware of how excessive this is, and half of these tests are an insult to my skills
 
 fun basicTest(expect: String, input: String) {
     assertEquals(expect, input.applyColorsAndDecor())
@@ -290,44 +290,8 @@ class Features {
     @Test fun `named color to string`() {
         assertEquals("§0hello", ("" + NamedColor.BLACK + "hello").applyNamedColors().minifyColors())
     }
-}
-
-class Playground {
     @Test
-    fun play() {
-        "{#bd020c>}&lᴏᴡɴᴇʀ{#FF0815<}"
-        //"{#AF65FC>}&lᴘʀᴏᴅᴜᴄᴇʀ{#BD81FF<}"
-        //"{#e67e22>}&lᴅᴇᴠ{#FFA658<}"
-        //"{#52a3ff>}&lꜱᴜᴘᴇʀᴠɪꜱᴏʀ{#83BDFF<}"
-        //"{#6c53ff>}&lꜱʀ.ᴍᴏᴅ{#a899ff<}"
-        //"{#8e7cff>}&lᴍᴏᴅ{#afa3ff<}"
-        //"{#a596ff>}&lʜᴇʟᴘᴇʀ{#cbc2ff<}"
-        //"{#98C6FA>}&lᴄʀᴇᴡ{#b6d6fc<}"
-        //"{#84e>}&lᴄᴏꜱᴍɪᴄ{#b8f<}"
-        //"{#48d>}&lᴀꜱᴛʀᴏ{#9cf<}"
-        //"{#f44>}&lᴛɪᴛᴀɴ{#f86<}"
-        //"{#f81>}&lꜱᴏʟᴀʀ{#fc6<}"
-        //"{#c5f>}&lʟᴜɴᴀʀ{#dae<}"
-        //"{#fd2>}&lᴄᴏᴍᴇᴛ{#ff9<}"
-        //"&#FF2929&lR&#FB3454&lO&#F63E7F&lS&#F249A9&lA&#ED53D4&lI&#E95EFF&lC"
-        //"&7&lꜱᴛᴀʀ"
-        //val color1 = "ec7"
-        //val color2 = "ed5"
-        //"{#$color1>}&lꜱᴏʟᴀʀ{#$color2<}"
-            //.componentColors()
-            .applyCmiGradients().minifyColors().replace(SECTION, '&')
-            .applyColors().applyBukkit()
-            .let(::println)
-    }
-
-    private fun String.applyBukkit() = replace(SECTION, '&')
-        .replace("&x((?:&[a-f0-9]){6})".toRegex()) {
-            "&#" + it.groupValues[1].replace("&", "")
-        }
-}
-class GradientTagTest {
-    @Test
-    fun tagsAndNewlinesStayInsideGradient() {
+    fun `tags and newlines stay inside gradient`() {
         val out = "{#a0a>}<bold>ab</bold>\ncd{#fff<}".applyCmiGradients()
         assertEquals(true, out.contains("<bold>") && out.contains("</bold>"))
         assertEquals(false, out.contains("{#"))
@@ -336,22 +300,17 @@ class GradientTagTest {
     }
 
     @Test
-    fun escapedAngleBracketIsKept() {
+    fun `escaped angle bracket is kept`() {
         assertEquals(true, "{#a0a>}a\\<b{#fff<}".applyCmiGradients().contains("\\<"))
     }
-}
-
-class ComponentShortCodeTest {
     @Test
-    fun singleCodesAreNotHex() {
+    fun `single codes are not hex`() {
         assertEquals("<green>hi", "§ahi".componentColors())
         assertEquals("<color:#aabbcc>hi", "§x§a§a§b§b§c§chi".componentColors())
     }
-}
 
-class MiniNameTest {
     @Test
-    fun lightPurpleUsesMiniMessageName() {
+    fun `light purple uses mini message name`() {
         assertEquals("<light_purple>x<dark_purple>y", "&dx&5y".componentColors())
     }
 }

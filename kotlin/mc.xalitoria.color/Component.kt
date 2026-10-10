@@ -6,14 +6,17 @@ fun String.componentBukkitCodes(): String =
     replace(bukkitColorRegex) { match ->
         val hex = match.value
         when (hex.length) {
-            8 -> StringBuilder(7).append("<color:#").apply {
+            8 -> StringBuilder().append("<color:#").apply {
                 for (c in hex.drop(3)) {
                     if (c == COLOR_DELIM) continue
                     append(c).append(c)
                 }
                 append(">")
             }
-            14 -> hex.replace("[${COLOR_DELIM}x]".toRegex(), "").let { "<color:#$it>" }
+            14 -> hex
+                .replace(COLOR_DELIM.toString(), "")
+                .replace("x", "#")
+                .let { "<color:$it>" }
             else -> hex
         }
     }
@@ -33,7 +36,7 @@ inline fun Array<String>.componentColorCodes() =
     map { it.componentColorCodes() }.toTypedArray()
 
 
-fun String.componentDecorCodes(): String =
+private fun String.componentDecorCodes2(): String =
     replace(codeDecorRegex) { match ->
         when (match.groupValues[1]) {
             "k" -> "obf"
@@ -45,6 +48,13 @@ fun String.componentDecorCodes(): String =
             else -> match.value
         }.let { "<$it>" }
     }
+fun String.componentDecorCodes(): String = this
+    .replace("&k", "<obf>")
+    .replace("&l", "<b>")
+    .replace("&m", "<st>")
+    .replace("&n", "<u>")
+    .replace("&o", "<i>")
+    .replace("&r", "<reset>")
 inline fun <T : Iterable<String>> T.componentDecorCodes(): List<String> =
     map { it.componentDecorCodes() }
 inline fun Array<String>.componentDecorCodes() =
