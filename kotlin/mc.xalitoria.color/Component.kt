@@ -6,7 +6,8 @@ fun String.componentBukkitCodes(): String =
     replace(bukkitColorRegex) { match ->
         val hex = match.value
         when (hex.length) {
-            8 -> StringBuilder().append("<color:#").apply {
+            8 -> buildString {
+                append("<color:#")
                 for (c in hex.drop(3)) {
                     if (c == COLOR_DELIM) continue
                     append(c).append(c)
