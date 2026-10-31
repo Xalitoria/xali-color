@@ -1,7 +1,9 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import xalitoria.repo.reposilite
+import mc.xalitoria.gradle.repo.reposilite
 
 plugins {
+    kotlin("jvm")
+    id("mc.xalitoria.conventions")
     `maven-publish`
 }
 
