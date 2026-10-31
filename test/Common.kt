@@ -295,7 +295,7 @@ class Features {
         val out = "{#a0a>}<bold>ab</bold>\ncd{#fff<}".applyCmiGradients()
         assertEquals(true, out.contains("<bold>") && out.contains("</bold>"))
         assertEquals(false, out.contains("{#"))
-        // four visible letters plus the newline are coloured; tags are not
+        // four visible letters plus the newline are colored; tags are not
         assertEquals(5, Regex("§x").findAll(out).count())
     }
 

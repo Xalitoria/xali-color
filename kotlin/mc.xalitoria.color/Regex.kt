@@ -38,9 +38,8 @@ val namedColorRegex             = Regex("\\{#($namedColorPattern)}", IGNORE_CASE
 val namedColorSeparatorRegex    = Regex("\\{#($namedColorPattern)<>}", IGNORE_CASE)
 val namedColorGradientRegex     = Regex("\\{#($namedColorPattern)>}(.*?)\\{#($namedColorPattern)<}", [IGNORE_CASE, DOT_MATCHES_ALL])
 val namedColorGradientEscapeRegex = Regex("\\\\<(?=>?})")
-//val namedColorGradientListRegex = Regex("\\{#(?:$namedColorPattern,)*?$namedColorPattern,?}", IGNORE_CASE)
 
-/** A MiniMessage tag such as `<bold>`, `</red>` or `<click:open_url:...>`; a gradient leaves these uncoloured. */
+/** A MiniMessage tag such as `<bold>`, `</red>` or `<click:open_url:...>`; a gradient leaves these uncolored. */
 val miniTagRegex = Regex("<[/!]?[a-z#][^<>]*>", IGNORE_CASE)
 
 val messageLinkRegex = Regex("(\\[.+])(\\(.+\\))", IGNORE_CASE)

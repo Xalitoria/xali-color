@@ -1,7 +1,7 @@
-/**
- * "Codes" ("Color Codes" or "Hex Codes") are minecraft-specific coded colors
- * "Colors" ("Hex Colors") are standard hex colors, named [NamedColor], or [Color] objects
- * I did my best, terminology is hard, anyways...
+/*
+ * Terminology used in this file:
+ *  - "Codes" (color codes, hex codes) are Minecraft-specific coded colors such as `&c`, `&#RRGGBB` and `§x§R§R§G§G§B§B`.
+ *  - "Colors" (hex colors) are standard hex colors, a [NamedColor] or a [Color] object.
  */
 
 @file:Suppress("NOTHING_TO_INLINE", "unused")
@@ -338,9 +338,7 @@ fun String.codesToAnsi(): String {
     val result = StringBuilder(length + 32)
     var cursor = 0
 
-    /**
- * TODO Find a better way to do this without a string map
- */
+    // TODO: find a way to do this without a string map.
     for ((kind = first, match = second) in matches) {
         val start = match.range.first
         val endEx = match.range.last + 1
@@ -409,7 +407,7 @@ fun String.gradient(start: Color, end: Color): String {
             }
         }
         /**
- * Tags stay uncoloured and uncounted; an escaped `\<` is one character, so its escape holds.
+ * Tags stay uncolored and uncounted; an escaped `\<` is one character, so its escape holds.
  */
         if (char == '<') miniTagRegex.matchAt(this, textIndex)?.let {
             result.append(it.value)
