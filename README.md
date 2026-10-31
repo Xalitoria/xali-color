@@ -7,7 +7,7 @@ server dependency, is published as `mc.xalitoria:color` and targets Java 8.
 
 ## Installation
 
-[`util`](../util/README.md) uses `color` as a published artifact (`libs.xalicraft.color` in `libs.versions.toml`), and the
+[`util`](../util/README.md) uses `color` as a published artifact (`libs.xalicraft.color` in `xali-gradle/libs.versions.toml`), and the
 plugins reach it through `util`.
 
 **File** `build.gradle.kts`
@@ -29,8 +29,8 @@ The artifact goes to `https://maven.xali.host/releases`. The credentials are rea
 `./gradlew :color:publishToMavenLocal` publishes to the local Maven repository to try a change.
 
 > [!NOTE]
-> The catalog pins the published version (`0.0.9`), which can differ from the version in `color/build.gradle.kts`. After
-> a release, raise `xalicraft-color` in `libs.versions.toml`.
+> The catalog (`xalicraft-color` in `xali-gradle/libs.versions.toml`) names the version `util` depends on. After a release,
+> raise it. In the workspace `util` compiles against the checked-out `color`, whatever the catalog says.
 
 ## Usage
 
